@@ -9,19 +9,5 @@
       "memory": 1024,
       "maxDuration": 60
     }
-  },
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.mjs"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/dist/index.html",
-      "status": 200
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
   }
 }
