@@ -1,6 +1,7 @@
 {
   "name": "siga-secult",
   "version": "1.0.0",
+  "type": "module",
   "description": "SIGA Secult - Sistema Integrado de Gestão Administrativa (Vercel Monorepo)",
   "private": true,
   "scripts": {
