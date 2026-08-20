@@ -1,15 +1,15 @@
 import 'dotenv/config.js';
-import 'dotenv/config.js';
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Debug: Log das variáveis de ambiente
 console.log('🔍 [DEBUG] Variáveis de Ambiente Carregadas:');
 console.log('DATABASE_URL:', process.env.DATABASE_URL ? '✅ Definida' : '❌ NÃO Definida');
 console.log('NODE_ENV:', process.env.NODE_ENV);
 console.log('JWT_SECRET:', process.env.JWT_SECRET ? '✅ Definida' : '❌ NÃO Definida');
-import path from 'path';
-import { fileURLToPath } from 'url';
+
 import { APP_CONFIG } from '../backend/src/config/appConfig.js';
 import { uploadDirectory } from '../backend/src/config/uploadConfig.js';
 import apiRoutes from '../backend/src/routes/index.js';
