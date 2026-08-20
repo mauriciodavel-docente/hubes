@@ -8,6 +8,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 try {
   console.log('Building project...');
   
+  console.log('Step 0: Installing frontend dependencies...');
+  execSync('npm install', { 
+    cwd: join(__dirname, 'frontend'), 
+    stdio: 'inherit' 
+  });
+  
   console.log('Step 1: Generating Prisma Client...');
   execSync('npm run prisma:generate', { 
     cwd: join(__dirname, 'backend'), 
