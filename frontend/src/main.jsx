@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
+import './debug.js'; // Debug logging
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
 import { NotificationContext, NotificationProvider } from './contexts/NotificationContext';
