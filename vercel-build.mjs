@@ -9,7 +9,7 @@ try {
   console.log('Building project...');
   
   console.log('Step 0: Installing frontend dependencies...');
-  execSync('npm ci --legacy-peer-deps', { 
+  execSync('npm install --legacy-peer-deps --force', { 
     cwd: join(__dirname, 'frontend'), 
     stdio: 'inherit' 
   });
