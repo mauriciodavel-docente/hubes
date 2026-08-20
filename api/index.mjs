@@ -39,15 +39,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Normalize paths - Vercel routes /api/* to /api/index.mjs but path still contains /api
-app.use((req, res, next) => {
-  if (req.path.startsWith('/api/')) {
-    req.url = req.url.substring(4); // Remove /api from the beginning
-    req.path = req.path.substring(4);
-  }
-  next();
-});
-
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] Incoming ${req.method} ${req.path}`, req.headers['content-type']);
   next();
@@ -60,9 +51,8 @@ app.use(httpLogger);
 // Static files (uploads)
 app.use('/uploads', express.static(uploadDirectory));
 
-// API routes - No Vercel, as rotas vêm sem /api prefix
-// Mapping: /api/auth/login → / no handler → /auth/login nas rotas
-app.use('/', apiRoutes);
+// API routes - Vercel keeps the /api prefix in the path
+app.use('/api', apiRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
