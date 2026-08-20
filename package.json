@@ -7,7 +7,6 @@
   "scripts": {
     "install-all": "npm install && npm --prefix frontend install && npm --prefix backend install",
     "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
-    "build": "npm --prefix backend run prisma:generate && npm --prefix frontend install && npm --prefix frontend run build",
     "start": "npm --prefix backend start",
     "seed": "npm --prefix backend run prisma:seed",
     "smoke": "node smoke-test3.js",
