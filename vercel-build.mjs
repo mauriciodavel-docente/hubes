@@ -14,13 +14,7 @@ try {
     stdio: 'inherit' 
   });
 
-  console.log('Step 2: Installing frontend dependencies...');
-  execSync('npm install', { 
-    cwd: join(__dirname, 'frontend'), 
-    stdio: 'inherit' 
-  });
-
-  console.log('Step 3: Building frontend with Vite...');
+  console.log('Step 2: Building frontend with Vite...');
   execSync('npm run build', { 
     cwd: join(__dirname, 'frontend'), 
     stdio: 'inherit' 
