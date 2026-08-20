@@ -14,7 +14,7 @@
     "prisma:migrate": "cd backend && npm run prisma:migrate"
   },
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
