@@ -13,8 +13,31 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS configuração melhorada para Vercel
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permitir requests sem origin (mobile apps, Postman, etc)
+    if (!origin) return callback(null, true);
+    
+    // Permitir Vercel URLs (produção e previews)
+    if (origin.includes('vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    
+    // Em desenvolvimento, permitir qualquer origem
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    // Em produção, rejeitar origens não autorizadas
+    callback(new Error('CORS não permitido para: ' + origin));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] Incoming ${req.method} ${req.path}`, req.headers['content-type']);
