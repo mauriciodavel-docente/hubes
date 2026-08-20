@@ -49,43 +49,63 @@ export const register = async ({ nome, email, senha, telefone, setor }) => {
 };
 
 export const login = async ({ email, senha }) => {
-  const usuario = await prisma.usuario.findUnique({ where: { email } });
+  console.log(`🔐 [LOGIN] Tentativa de login com email: ${email}`);
+  
+  try {
+    console.log(`🔐 [LOGIN] Buscando usuário no banco...`);
+    const usuario = await prisma.usuario.findUnique({ where: { email } });
+    
+    if (!usuario) {
+      console.log(`🔐 [LOGIN] ❌ Usuário não encontrado: ${email}`);
+      throw ApiError.unauthorized('Email ou senha inválidos');
+    }
+    
+    console.log(`🔐 [LOGIN] ✅ Usuário encontrado: ${usuario.nome}`);
 
-  if (!usuario) {
-    throw ApiError.unauthorized('Email ou senha inválidos');
+    if (usuario.status !== 'Ativo') {
+      console.log(`🔐 [LOGIN] ❌ Usuário inativo: ${usuario.status}`);
+      throw ApiError.forbidden('Usuário inativo');
+    }
+
+    console.log(`🔐 [LOGIN] Validando senha...`);
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+    if (!senhaValida) {
+      console.log(`🔐 [LOGIN] ❌ Senha inválida`);
+      throw ApiError.unauthorized('Email ou senha inválidos');
+    }
+    
+    console.log(`🔐 [LOGIN] ✅ Senha válida`);
+
+    console.log(`🔐 [LOGIN] Gerando tokens...`);
+    const payload = buildUserPayload(usuario);
+    const token = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+    const hashedRefreshToken = hashToken(refreshToken);
+
+    console.log(`🔐 [LOGIN] Salvando refresh token no banco...`);
+    await prisma.usuario.update({
+      where: { id: usuario.id },
+      data: { refreshToken: hashedRefreshToken },
+    });
+
+    console.log(`🔐 [LOGIN] ✅ Login bem-sucedido para: ${usuario.nome}`);
+    
+    return {
+      usuario: {
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        perfil: usuario.perfil,
+        setor: usuario.setor,
+        status: usuario.status,
+      },
+      token,
+      refreshToken,
+    };
+  } catch (error) {
+    console.error(`🔐 [LOGIN] ❌ Erro durante login:`, error.message || error);
+    throw error;
   }
-
-  if (usuario.status !== 'Ativo') {
-    throw ApiError.forbidden('Usuário inativo');
-  }
-
-  const senhaValida = await bcrypt.compare(senha, usuario.senha);
-  if (!senhaValida) {
-    throw ApiError.unauthorized('Email ou senha inválidos');
-  }
-
-  const payload = buildUserPayload(usuario);
-  const token = generateAccessToken(payload);
-  const refreshToken = generateRefreshToken(payload);
-  const hashedRefreshToken = hashToken(refreshToken);
-
-  await prisma.usuario.update({
-    where: { id: usuario.id },
-    data: { refreshToken: hashedRefreshToken },
-  });
-
-  return {
-    usuario: {
-      id: usuario.id,
-      nome: usuario.nome,
-      email: usuario.email,
-      perfil: usuario.perfil,
-      setor: usuario.setor,
-      status: usuario.status,
-    },
-    token,
-    refreshToken,
-  };
 };
 
 export const refreshToken = async (refreshToken) => {
