@@ -16,9 +16,12 @@
       "dest": "/api/index.js"
     },
     {
+      "src": "/uploads/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/frontend/dist/index.html",
-      "status": 200
+      "dest": "/frontend/dist/index.html"
     }
   ],
   "env": {
