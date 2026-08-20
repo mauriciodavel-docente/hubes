@@ -17,7 +17,7 @@ const app = express();
 app.use(cors());
 
 app.use((req, res, next) => {
-  console.log(`Incoming ${req.method} ${req.path}`, req.headers['content-type']);
+  console.log(`[${new Date().toISOString()}] Incoming ${req.method} ${req.path}`, req.headers['content-type']);
   next();
 });
 
@@ -34,11 +34,13 @@ app.use('/', apiRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
+  console.log('Health check called');
   res.json({ success: true, message: 'SIGA Secult Backend está rodando!' });
 });
 
 // 404 handler
 app.use((req, res) => {
+  console.log(`404 - Route not found: ${req.method} ${req.path}`);
   res.status(404).json({ success: false, message: 'Rota não encontrada' });
 });
 

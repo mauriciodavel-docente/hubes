@@ -1,6 +1,16 @@
 import { ApiError } from '../utils/errors.js';
 
 export default (err, req, res, next) => {
+  // Log sempre que erro ocorre
+  console.error(`[ERROR] ${req.method} ${req.path}`);
+  console.error('Error object:', {
+    message: err?.message,
+    name: err?.name,
+    code: err?.code,
+    status: err?.status,
+    stack: err?.stack?.substring(0, 200)
+  });
+
   // Erros que já são ApiError (lançados pelo app)
   if (err instanceof ApiError) {
     const payload = { success: false, message: err.message };
@@ -11,13 +21,13 @@ export default (err, req, res, next) => {
   // Erros do Prisma: tratar alguns códigos conhecidos para respostas mais claras
   try {
     if (err && err.name === 'PrismaClientInitializationError') {
-      console.error('PrismaClientInitializationError:', err.message);
+      console.error('🔴 PrismaClientInitializationError:', err.message);
       return res.status(503).json({ success: false, message: 'Serviço indisponível: falha ao conectar ao banco de dados' });
     }
 
     // Erros de integridade/validação do Prisma (ex: P2002 unique constraint)
     if (err && err.code && typeof err.code === 'string' && err.code.startsWith('P')) {
-      console.error('Prisma error:', err.code, err.meta || err.message || err);
+      console.error('🔴 Prisma error:', err.code, err.meta || err.message || err);
       // Mapear alguns códigos para status apropriados
       if (err.code === 'P2002') {
         // Conflito por campo único
@@ -33,6 +43,6 @@ export default (err, req, res, next) => {
   }
 
   // Caso geral: log completo e resposta genérica
-  console.error(err);
+  console.error('🔴 Erro não tratado:', err);
   return res.status(500).json({ success: false, message: 'Erro interno do servidor' });
 };
