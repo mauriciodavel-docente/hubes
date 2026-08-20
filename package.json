@@ -1,0 +1,10 @@
+{
+  "name": "siga-smoke-tests",
+  "version": "1.0.0",
+  "description": "Smoke tests for SIGA Secult (login + create endpoints + upload)",
+  "scripts": {
+    "smoke": "node smoke-test3.js"
+  },
+  "author": "Copilot",
+  "license": "MIT"
+}
