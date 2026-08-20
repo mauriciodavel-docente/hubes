@@ -5,7 +5,7 @@
   "framework": "vite",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/index.js": {
+    "api/index.mjs": {
       "memory": 1024,
       "maxDuration": 60
     }
@@ -13,11 +13,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.js"
+      "dest": "/api/index.mjs"
     },
     {
       "src": "/uploads/(.*)",
-      "dest": "/api/index.js"
+      "dest": "/api/index.mjs"
     },
     {
       "src": "/(.*)",
