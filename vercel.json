@@ -1,4 +1,5 @@
 {
+  "buildCommand": "node vercel-build.mjs",
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.mjs": {
