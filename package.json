@@ -1,10 +1,24 @@
 {
-  "name": "siga-smoke-tests",
+  "name": "siga-secult",
   "version": "1.0.0",
-  "description": "Smoke tests for SIGA Secult (login + create endpoints + upload)",
+  "description": "SIGA Secult - Sistema Integrado de Gestão Administrativa (Vercel Monorepo)",
+  "private": true,
   "scripts": {
-    "smoke": "node smoke-test3.js"
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "build": "cd backend && npm run prisma:generate && cd ../frontend && npm run build",
+    "start": "cd backend && npm start",
+    "seed": "cd backend && npm run prisma:seed",
+    "smoke": "node smoke-test3.js",
+    "prisma:generate": "cd backend && npm run prisma:generate",
+    "prisma:migrate": "cd backend && npm run prisma:migrate"
   },
-  "author": "Copilot",
+  "engines": {
+    "node": "18.x"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "author": "Mauricio Davel",
   "license": "MIT"
 }
