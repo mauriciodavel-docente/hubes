@@ -39,6 +39,15 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Normalize paths - Vercel routes /api/* to /api/index.mjs but path still contains /api
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    req.url = req.url.substring(4); // Remove /api from the beginning
+    req.path = req.path.substring(4);
+  }
+  next();
+});
+
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] Incoming ${req.method} ${req.path}`, req.headers['content-type']);
   next();
