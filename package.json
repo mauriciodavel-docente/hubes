@@ -5,14 +5,14 @@
   "description": "SIGA Secult - Sistema Integrado de Gestão Administrativa (Vercel Monorepo)",
   "private": true,
   "scripts": {
-    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
-    "build": "cd backend && npm run prisma:generate && cd ../frontend && npm run build",
-    "start": "cd backend && npm start",
-    "seed": "cd backend && npm run prisma:seed",
+    "install-all": "npm install && npm --prefix frontend install && npm --prefix backend install",
+    "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "build": "npm --prefix backend run prisma:generate && npm --prefix frontend install && npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
+    "seed": "npm --prefix backend run prisma:seed",
     "smoke": "node smoke-test3.js",
-    "prisma:generate": "cd backend && npm run prisma:generate",
-    "prisma:migrate": "cd backend && npm run prisma:migrate"
+    "prisma:generate": "npm --prefix backend run prisma:generate",
+    "prisma:migrate": "npm --prefix backend run prisma:migrate"
   },
   "engines": {
     "node": "24.x"
